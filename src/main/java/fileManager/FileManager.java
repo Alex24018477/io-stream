@@ -1,10 +1,13 @@
 package fileManager;
 
 import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileOutputStream;
+import java.io.IOException;
 
 public class FileManager {
-    public static int countFiles;
-    public static int countDirs;
+    private static int countFiles;
+    private static int countDirs;
 
     // public static int countFiles(String path) - принимает путь к папке,
 // возвращает количество файлов в папке и всех подпапках по пути
@@ -18,7 +21,6 @@ public class FileManager {
                 } else {
                     countFiles(file1.getPath());
                 }
-
             }
         }
         return countFiles;
@@ -45,6 +47,21 @@ public class FileManager {
 //    public static void move(String from, String to) - метод по перемещению папок и файлов.
 //    Параметр from - путь к файлу или папке, параметр to - путь к папке куда будет производиться копирование.
     public static void copy(String from, String to) {
+        try (FileInputStream fis = new FileInputStream(from);
+             FileOutputStream fos = new FileOutputStream(to)) {
+            byte[] bufer = new byte[1024];
+            int byteread = 0;
+            while ((byteread = fis.read(bufer)) > 0){
+                fos.write(bufer, 0, byteread);
+                fos.close();
+                fis.close();
+            }
+        } catch (IOException e) {
+            System.out.println(e);
+        }
+    }
 
+    public static void main(String[] args) {
+        FileManager.copy("Test word.txt", "Test copy.txt");
     }
 }

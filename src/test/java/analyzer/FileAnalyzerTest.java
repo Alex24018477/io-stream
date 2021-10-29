@@ -18,12 +18,16 @@ import java.io.IOException;
 import static org.junit.jupiter.api.Assertions.*;
 
 class FileAnalyzerTest {
-    FileAnalyzer fileAnalyzer;
+    private FileAnalyzer fileAnalyzer;
+    private String filePath;
+    private String word;
 
     @BeforeEach
     void setUp() {
+        filePath = "Test word.txt";
+        word = "Java";
 
-        fileAnalyzer = new FileAnalyzer("Test word.txt", "Java");
+        fileAnalyzer = new FileAnalyzer();
     }
 
     //    @Test
@@ -36,12 +40,12 @@ class FileAnalyzerTest {
 //    }
     @Test
     public void testReadFile() throws IOException {
-        assertEquals("Hello JAVA!", fileAnalyzer.readFile());
+        assertEquals("Hello JAVA!", fileAnalyzer.readFile(filePath));
     }
 
     @Test
     public void testFindWordInFile() throws IOException {
-        assertEquals(1, fileAnalyzer.findWord());
+        assertEquals(1, fileAnalyzer.findWord(filePath, word));
     }
 
     @Test
@@ -51,7 +55,7 @@ class FileAnalyzerTest {
                 "Hello Java?\n" +
                 "Hello Java!\n" +
                 "Hello  Hello Java.\n" +
-                "Java!", fileAnalyzer.findSentence());
+                "Java!", fileAnalyzer.findSentence("Test sentence.txt", word));
     }
 
 

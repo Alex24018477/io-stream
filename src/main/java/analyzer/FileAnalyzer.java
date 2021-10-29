@@ -42,23 +42,28 @@ public class FileAnalyzer {
 //    }
 
 
-    public String readFile() throws IOException {
+    public String readFile(String filePath) throws IOException {
         File file = new File(filePath);
-        if (!file.isFile()) {
-            return "Enter right file path";
-        }
-        InputStream inputStream = new FileInputStream(filePath);
+        BufferedReader bufferedReader = new BufferedReader(new FileReader(file));
         StringBuilder sb = new StringBuilder();
-        int i;
-        while ((i = inputStream.read()) != -1) {
-            sb.append((char) i);
+        String string = "";
+        while ((string = bufferedReader.readLine()) != null){
+            sb.append(string);
         }
+//
+//        InputStream inputStream = new FileInputStream(filePath);
+//        StringBuilder sb = new StringBuilder();
+//
+//        int i;
+//        while ((i = inputStream.read()) != -1) {
+//            sb.append((char) i);
+//        }
         return sb.toString();
     }
 
-    public int findWord() throws IOException {
+    public int findWord(String filePath, String word) throws IOException {
         int count = 0;
-        String textFromFile = readFile();
+        String textFromFile = readFile(filePath);
         if (textFromFile.length() != 0) {
             String[] wordsFromText = textFromFile.split(" ");
             for (String wordFromText : wordsFromText) {
@@ -70,9 +75,9 @@ public class FileAnalyzer {
         return count;
     }
 
-    public String findSentence() throws IOException {
+    public String findSentence(String filePath,String word) throws IOException {
         StringJoiner sj = new StringJoiner("\n");
-        for (String sentence : findAllSentences()) {
+        for (String sentence : findAllSentences(filePath)) {
             if (sentence.toUpperCase().contains(word.toUpperCase())) {
                 sj.add(sentence);
             }
@@ -80,9 +85,9 @@ public class FileAnalyzer {
         return sj.toString();
     }
 
-    private List<String> findAllSentences() throws IOException {
+    private List<String> findAllSentences(String filePath) throws IOException {
         List<String> allSentences = new ArrayList<String>();
-        String textFromFile = readFile();
+        String textFromFile = readFile(filePath);
         if (textFromFile.length() != 0) {
             String[] wordsFromText = textFromFile.split(" ");
             StringJoiner sj = new StringJoiner(" ");
@@ -98,10 +103,10 @@ public class FileAnalyzer {
     }
 
     public static void main(String[] args) throws IOException {
-        FileAnalyzer fileAnalyzer = new FileAnalyzer("Test sentence.txt", "Java");
-        System.out.println(fileAnalyzer.findSentence());
-//        for (String string: fileAnalyzer.findAllSentences()){
-//            System.out.println(string);
-//        }
+        FileAnalyzer fileAnalyzer = new FileAnalyzer();
+//        System.out.println(fileAnalyzer.readFile("Test sentence.txt"));
+        for (String string: fileAnalyzer.findAllSentences("Test sentence.txt")){
+            System.out.println(string);
+        }
     }
 }
